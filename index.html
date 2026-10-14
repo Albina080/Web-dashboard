@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05070D">
+  <title>NASA // Space Observatory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="NASA Space Observatory">
+        <span class="brand-mark">N</span>
+        <span><strong>NASA</strong><small>SPACE OBSERVATORY</small></span>
+      </a>
+
+      <nav class="nav" aria-label="Основная навигация">
+        <button class="nav-item active" data-section="overview"><span>◈</span>Обзор</button>
+        <button class="nav-item" data-section="asteroids"><span>◌</span>Астероиды</button>
+        <button class="nav-item" data-section="weather"><span>☼</span>Космическая погода</button>
+        <button class="nav-item" data-section="apod"><span>✦</span>APOD</button>
+        <button class="nav-item" data-section="search"><span>⌕</span>Поиск</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="mini-status"><i></i><span>NASA DATA LINK</span><b>LIVE</b></div>
+        <p>Данные предоставлены открытыми API NASA.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">MISSION CONTROL / EARTH ORBIT</div>
+          <h1>Space Observatory</h1>
+        </div>
+        <div class="topbar-meta">
+          <div class="utc"><span>UTC</span><strong id="clock">--:--:--</strong></div>
+          <button id="refreshBtn" class="refresh" title="Обновить данные">↻ <span>Обновить</span></button>
+        </div>
+      </header>
+
+      <section class="hero-grid">
+        <article class="panel apod-panel" id="apodPanel">
+          <div class="panel-head">
+            <div>
+              <span class="kicker">ASTRONOMY PICTURE OF THE DAY</span>
+              <h2 id="apodTitle">Загрузка изображения…</h2>
+            </div>
+            <span class="live-dot">NASA</span>
+          </div>
+          <div class="apod-media" id="apodMedia">
+            <div class="skeleton"></div>
+          </div>
+          <div class="apod-copy">
+            <div class="date-line" id="apodDate">—</div>
+            <p id="apodExplanation">Получаем данные NASA…</p>
+            <div class="credit" id="apodCredit">—</div>
+          </div>
+        </article>
+
+        <div class="metrics">
+          <article class="metric-card">
+            <div class="metric-icon">☄</div>
+            <span>NEAR-EARTH OBJECTS</span>
+            <strong id="neoCount">—</strong>
+            <small id="neoSub">на ближайшие дни</small>
+          </article>
+          <article class="metric-card">
+            <div class="metric-icon">⚡</div>
+            <span>SOLAR FLARES</span>
+            <strong id="flareCount">—</strong>
+            <small>за последние 30 дней</small>
+          </article>
+          <article class="metric-card">
+            <div class="metric-icon">◉</div>
+            <span>GEOMAGNETIC STORMS</span>
+            <strong id="stormCount">—</strong>
+            <small>за последние 30 дней</small>
+          </article>
+          <article class="metric-card accent">
+            <div class="metric-icon">◎</div>
+            <span>DATA CONNECTION</span>
+            <strong id="apiStatus">CHECKING</strong>
+            <small id="lastUpdate">ожидание ответа API</small>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-block" id="asteroids">
+        <div class="section-title">
+          <div>
+            <span class="kicker">NEOWS / CLOSE APPROACH</span>
+            <h2>Ближайшие к Земле объекты</h2>
+          </div>
+          <span class="section-date" id="neoRange">—</span>
+        </div>
+        <div class="table-panel">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>OBJECT</th>
+                  <th>APPROACH</th>
+                  <th>DISTANCE</th>
+                  <th>VELOCITY</th>
+                  <th>DIAMETER</th>
+                  <th>RISK</th>
+                </tr>
+              </thead>
+              <tbody id="neoTable">
+                <tr><td colspan="6" class="loading-row">Получаем данные о ближайших объектах…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block" id="weather">
+        <div class="section-title">
+          <div>
+            <span class="kicker">DONKI / SPACE WEATHER</span>
+            <h2>Активность Солнца</h2>
+          </div>
+          <span class="section-date">LAST 30 DAYS</span>
+        </div>
+        <div class="weather-grid">
+          <article class="panel chart-panel">
+            <div class="panel-head compact">
+              <div><span class="kicker">SOLAR FLARES</span><h3>Вспышки по дням</h3></div>
+              <span class="legend"><i></i>events</span>
+            </div>
+            <div class="bar-chart" id="flareChart"></div>
+          </article>
+          <article class="panel events-panel">
+            <div class="panel-head compact">
+              <div><span class="kicker">RECENT EVENTS</span><h3>Последние события</h3></div>
+            </div>
+            <div id="eventsList" class="events-list">
+              <div class="loading-row">Загрузка…</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-block" id="apod">
+        <div class="section-title">
+          <div>
+            <span class="kicker">NASA ARCHIVE</span>
+            <h2>Ещё немного космоса</h2>
+          </div>
+          <span class="section-date">RECENT APOD</span>
+        </div>
+        <div class="apod-gallery" id="apodGallery"></div>
+      </section>
+
+      <section class="section-block image-search-section" id="search">
+        <div class="section-title">
+          <div>
+            <span class="kicker">NASA IMAGE LIBRARY</span>
+            <h2>Поиск по космосу</h2>
+          </div>
+          <span class="section-date">IMAGES.NASA.GOV</span>
+        </div>
+
+        <div class="search-panel">
+          <form id="imageSearchForm" class="image-search-form">
+            <div class="search-input-wrap">
+              <span>⌕</span>
+              <input id="imageSearchInput" type="search"
+                     placeholder="Например: nebula, galaxy, moon, mars…"
+                     autocomplete="off">
+            </div>
+            <button type="submit" class="search-btn">ИСКАТЬ <span>↗</span></button>
+          </form>
+
+          <div class="search-tags">
+            <button type="button" data-query="nebula">Nebula</button>
+            <button type="button" data-query="galaxy">Galaxy</button>
+            <button type="button" data-query="moon">Moon</button>
+            <button type="button" data-query="mars">Mars</button>
+            <button type="button" data-query="earth">Earth</button>
+            <button type="button" data-query="apollo">Apollo</button>
+          </div>
+
+          <div id="imageSearchStatus" class="search-status">
+            Введите запрос — NASA Image and Video Library вернёт изображения и видео по теме.
+          </div>
+          <div id="imageSearchResults" class="image-results"></div>
+        </div>
+      </section>
+
+      <footer>
+        <span>NASA // SPACE OBSERVATORY</span>
+        <span>OPEN DATA INTERFACE</span>
+        <span id="footerTime">—</span>
+      </footer>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
